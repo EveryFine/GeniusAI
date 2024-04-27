@@ -19,7 +19,7 @@ import streamlit as st
 from langchain_community.llms.openai import OpenAI
 from langchain_core.messages import AIMessage, HumanMessage
 
-from LlmClients.OpenAIClient import OpenAIClient
+from llm_clients.openai_client import OpenAIClient
 
 model_name = "gpt-3.5-turbo"
 openai_api_key = os.getenv("OPENAI_API_KEY")
