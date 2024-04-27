@@ -31,7 +31,7 @@ st.markdown("# 🦤A Class Chatbot")
 st.markdown(
     """
     #### This an A class chatbot to assist the human resolve some simple issues!🥰
-    > It is a little for this chatbot to answer about the most recent information such as current time
+    > It is a little for this chatbot to answer about real-time information such as the current date
     
     """
 )
