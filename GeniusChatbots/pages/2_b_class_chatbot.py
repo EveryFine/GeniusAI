@@ -15,9 +15,18 @@ __author__ = 'EveryFine'
 
 import streamlit as st
 
-st.title('Chatbot Type B')
-st.write('This is the page for Chatbot Type B.')
-user_input = st.text_input("Say something to Bot B")
-if user_input:
-    st.write(f"Bot B says: I received your message: {user_input}")
+from home import login
+
+
+def create_chatbot():
+    st.title('Chatbot Type B')
+    st.write('This is the page for Chatbot Type B.')
+    user_input = st.text_input("Say something to Bot B")
+    if user_input:
+        st.write(f"Bot B says: I received your message: {user_input}")
+
+
+login('.streamlit/config.yaml')
+if st.session_state["authentication_status"]:
+    create_chatbot()
 
