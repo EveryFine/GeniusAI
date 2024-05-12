@@ -28,6 +28,7 @@ from langchain_core.runnables import RunnableConfig
 from home import login
 from llm_clients.openai_chat_agent import OpenAIChatAgent
 
+# 解决错误：RuntimeError: There is no current event loop in thread 'ScriptRunner.scriptThread'.
 import asyncio
 
 # def get_or_create_eventloop():
@@ -59,7 +60,7 @@ def create_chatbot():
     openai_api_key = os.getenv("OPENAI_API_KEY")
     msgs = StreamlitChatMessageHistory()
     memory = ConversationBufferMemory(
-        chat_momory=msgs,
+        chat_memory=msgs,
         return_messages=True,
         memory_key="chat_history",
         output_key="output"
