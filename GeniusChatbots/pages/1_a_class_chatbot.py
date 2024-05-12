@@ -22,7 +22,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 from home import login
 from llm_clients.openai_client import OpenAIClient
 
-st.set_page_config(page_title="Junior Chatbot", page_icon="🦤")
+st.set_page_config(page_title="A Class Chatbot", page_icon="🦤")
 
 
 def create_chatbot():
