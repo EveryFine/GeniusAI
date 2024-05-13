@@ -38,3 +38,7 @@ class OpenAIChatAgent(LlmClientBase):
     def invoke_agent_executor(self, prompt, cfg):
         response = self.agent_executor.invoke(prompt, cfg)
         return response
+
+    def stream_agent_executor(self, prompt, cfg):
+        response = self.agent_executor.stream(prompt, cfg)
+        return response

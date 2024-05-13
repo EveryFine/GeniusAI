@@ -23,6 +23,7 @@ from langchain_community.chat_message_histories import StreamlitChatMessageHisto
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.runnables import RunnableConfig
 
 from home import login
@@ -44,6 +45,7 @@ import asyncio
 # asyncio.set_event_loop(loop)
 
 st.set_page_config(page_title="B Class Chatbot", page_icon="🐇")
+
 
 
 def create_chatbot():
@@ -80,8 +82,8 @@ def create_chatbot():
                     st.write(step[1])
             st.write(msg.content)
 
-    if prompt := st.chat_input(placeholder="Who won the women's U.S. Open in 2018?"):
-        st.chat_message("user").write(prompt);
+    if prompt := st.chat_input("Who won the women's U.S. Open in 2018?"):
+        st.chat_message("user").write(prompt)
         if not openai_api_key:
             st.info("Please add your OpenAI API key to continue.")
             st.stop()
