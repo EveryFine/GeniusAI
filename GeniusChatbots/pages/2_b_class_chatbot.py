@@ -47,7 +47,6 @@ import asyncio
 st.set_page_config(page_title="B Class Chatbot", page_icon="🐇")
 
 
-
 def create_chatbot():
     st.sidebar.header("🐇B Class Chatbot")
     st.markdown("# 🐇B Class Chatbot")
@@ -98,9 +97,16 @@ def create_chatbot():
             st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
             cfg = RunnableConfig()
             cfg["callbacks"] = [st_cb]
+            # Response without stream
             response = chat_agent.invoke_agent_executor(prompt, cfg)
             st.write(response["output"])
+            st.write(response["output"])
             st.session_state.steps[str(len(msgs.messages) - 1)] = response["intermediate_steps"]
+
+            # Response with stream 效果不佳
+            # stream = chat_agent.stream_agent_executor(prompt, cfg)
+            # st.write_stream(stream)
+            # st.session_state.steps[str(len(msgs.messages) - 1)] = stream["intermediate_steps"]
 
 
 login('.streamlit/config.yaml')
