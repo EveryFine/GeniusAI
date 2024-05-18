@@ -8,11 +8,20 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/geniuschatbots
+  ENVIRONMENT: dev
+  TARGET_SSH_HOST: ${{ secrets.TARGET_SSH_HOST }}
+  TARGET_SSH_USER: ${{ secrets.TARGET_SSH_USER }}
+  TARGET_SSH_PASSWORD: ${{ secrets.TARGET_SSH_PASSWORD }}
+  TARGET_SSH_PORT: ${{ secrets.TARGET_SSH_PORT }}
+  TARGET_SERVICE_PORT: 13501
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  TAVILY_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
 jobs:
   build-and-push-image:
     name: Build Docker image and push to repositories
     runs-on: ubuntu-latest
+    environment: ${{ env.ENVIRONMENT }}
     permissions:
       contents: read
       packages: write
@@ -46,6 +55,19 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: deploying
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ env.TARGET_SSH_HOST }}
+          username: ${{ env.TARGET_SSH_USER }}
+          password: ${{ env.TARGET_SSH_PASSWORD }}
+          port: ${{ env.TARGET_SSH_PORT }}
+          script: |
+            docker image pull ${{ steps.meta.outputs.tags }}
+            docker container stop geniusdev
+            docker container rm geniusdev
+            docker container run -d --name geniusdev -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} ${{ steps.meta.outputs.tags }}
 
 
       
