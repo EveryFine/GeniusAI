@@ -31,6 +31,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Write streamlit config
         run: |
+          mkdir .streamlit
           echo "${{ env.STREAMLIT_CONFIG }}" > .streamlit/config.yaml
           ls
           pwd
