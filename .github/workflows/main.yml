@@ -1,9 +1,9 @@
-name: Genius AI Dev Deploy
+name: Genius AI Main Deploy
 on:
-  # push:
-  #   branches: [ "dev" ]
-  # pull_request:
-  #   branches: [ "dev" ]
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch
 
 env:
@@ -22,7 +22,7 @@ jobs:
   build-and-push-image:
     name: Build Docker image and push to repositories
     runs-on: ubuntu-latest
-    environment: dev
+    environment: main
     permissions:
       contents: read
       packages: write
@@ -47,7 +47,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-           type=sha,prefix={{branch}}-
+            type=sha,prefix={{branch}}-
       
       - name: Build and push Docker image
         id: push
@@ -67,9 +67,9 @@ jobs:
           port: ${{ env.TARGET_SSH_PORT }}
           script: |
             docker image pull ${{ steps.meta.outputs.tags }}
-            docker container stop geniusdev
-            docker container rm geniusdev
-            docker container run -d --name geniusdev -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} ${{ steps.meta.outputs.tags }}
+            docker container stop geniusmain
+            docker container rm geniusmain
+            docker container run -d --name geniusmain -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} ${{ steps.meta.outputs.tags }}
 
 
       
