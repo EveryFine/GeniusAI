@@ -12,7 +12,7 @@ env:
   TARGET_SSH_PORT: ${{ secrets.TARGET_SSH_PORT }}
   TARGET_SERVICE_PORT: 23501
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-  TAVILY_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
   STREAMLIT_CONFIG: ${{ secrets.STREAMLIT_CONFIG }}
 
 jobs:
