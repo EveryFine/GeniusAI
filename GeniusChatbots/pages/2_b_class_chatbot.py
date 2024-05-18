@@ -14,6 +14,7 @@
 __author__ = 'EveryFine'
 
 import os
+from datetime import datetime
 
 import streamlit as st
 from langchain.agents import ConversationalChatAgent, AgentExecutor
@@ -25,6 +26,7 @@ from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.runnables import RunnableConfig
+from langchain_core.tools import Tool
 
 from home import login
 from llm_clients.openai_chat_agent import OpenAIChatAgent
@@ -86,7 +88,12 @@ def create_chatbot():
         if not openai_api_key:
             st.info("Please add your OpenAI API key to continue.")
             st.stop()
-        tools = [TavilySearchResults()]
+        datetime_tool = Tool(
+            name="Datetime",
+            func=lambda x: datetime.now().isoformat(),
+            description="Returns the current datetime",
+        )
+        tools = [TavilySearchResults(), datetime_tool]
         chat_agent = OpenAIChatAgent(
             model_name=model_name,
             openai_api_key=openai_api_key,
@@ -99,7 +106,6 @@ def create_chatbot():
             cfg["callbacks"] = [st_cb]
             # Response without stream
             response = chat_agent.invoke_agent_executor(prompt, cfg)
-            st.write(response["output"])
             st.write(response["output"])
             st.session_state.steps[str(len(msgs.messages) - 1)] = response["intermediate_steps"]
 
