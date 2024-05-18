@@ -14,7 +14,7 @@
 __author__ = 'EveryFine'
 
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 import streamlit as st
 from langchain.agents import ConversationalChatAgent, AgentExecutor
@@ -90,7 +90,7 @@ def create_chatbot():
             st.stop()
         datetime_tool = Tool(
             name="Datetime",
-            func=lambda x: datetime.now().isoformat(),
+            func=lambda x: datetime.now(timezone.utc).astimezone().isoformat(),
             description="Returns the current datetime",
         )
         tools = [TavilySearchResults(), datetime_tool]
