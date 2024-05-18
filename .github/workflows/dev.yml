@@ -33,8 +33,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
+            type=ref,event=branch,value={{sha}}
+            type=ref,event=pr,value={{sha}}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       
