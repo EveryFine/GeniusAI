@@ -8,7 +8,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/geniuschatbots
-  ENVIRONMENT: dev
   TARGET_SSH_HOST: ${{ secrets.TARGET_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.TARGET_SSH_USER }}
   TARGET_SSH_PASSWORD: ${{ secrets.TARGET_SSH_PASSWORD }}
@@ -21,7 +20,7 @@ jobs:
   build-and-push-image:
     name: Build Docker image and push to repositories
     runs-on: ubuntu-latest
-    environment: ${{ env.ENVIRONMENT }}
+    environment: dev
     permissions:
       contents: read
       packages: write
