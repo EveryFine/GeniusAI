@@ -30,8 +30,8 @@ def create_chatbot():
     model_name = "gpt-3.5-turbo"
     openai_api_key = os.getenv("OPENAI_API_KEY")
     llm_client = OpenAIClient(model_name=model_name, openai_api_key=openai_api_key)
-    st.sidebar.header("🦤A Class Chatbot")
-    st.markdown("# 🦤A Class Chatbot")
+    st.sidebar.header("🦤 A Class Chatbot")
+    st.markdown("# 🦤 A Class Chatbot")
     st.markdown(
         """
         #### This an A class chatbot to assist the human resolve some simple issues!🥰

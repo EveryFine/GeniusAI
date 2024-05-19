@@ -50,8 +50,8 @@ st.set_page_config(page_title="B Class Chatbot", page_icon="🐇")
 
 
 def create_chatbot():
-    st.sidebar.header("🐇B Class Chatbot")
-    st.markdown("# 🐇B Class Chatbot")
+    st.sidebar.header("🐇 B Class Chatbot")
+    st.markdown("# 🐇 B Class Chatbot")
     st.markdown(
         """
         #### This a B class chatbot to assist the human resolve some comprehensive issues!🥰
@@ -83,7 +83,7 @@ def create_chatbot():
                     st.write(step[1])
             st.write(msg.content)
 
-    if prompt := st.chat_input("Who won the women's U.S. Open in 2018?"):
+    if prompt := st.chat_input("Type your message here..."):
         st.chat_message("user").write(prompt)
         if not openai_api_key:
             st.info("Please add your OpenAI API key to continue.")

@@ -40,7 +40,7 @@ import streamlit as st
 
 from llm_clients.openai_rag_client import OpenAIRagClient
 
-
+st.set_page_config(page_title="RAG Website Chatbot", page_icon="🦀")
 def get_vectorstore_from_url(url):
     # get the text in document form
     loader = WebBaseLoader(url)
