@@ -28,9 +28,19 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from home import login
 import streamlit as st
 
+'''
+REFERENCE
+https://github.com/alejandro-ao/chat-with-websites/blob/master/src/app.py
+改进项：
+1. 流式输出结果stream
+2. 将模型相关内容放入单独的类中
+3. 在更改url时弹出是否更新url的提示，用户确认之后增加新网站的内容到向量库中
+4. 使用langsmith跟踪所发出的请求结果
+5. 最好运行过程中能够显示所引用的内容源
+'''
 
-### REFERENCE
-### https://github.com/alejandro-ao/chat-with-websites/blob/master/src/app.py
+
+
 
 def get_vectorstore_from_url(url):
     # get the text in document form
