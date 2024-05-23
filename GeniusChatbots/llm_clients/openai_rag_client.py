@@ -39,8 +39,18 @@ class OpenAIRagClient(LlmClientBase):
 
         return response['answer']
 
+    def get_stream_response(self, user_input, chat_history, vector_store):
+        retriever_chain = self.get_context_retriever_chain(vector_store)
+        conversation_rag_chain = self.get_conversational_rag_chain(retriever_chain)
+
+        stream = conversation_rag_chain.stream({
+            "chat_history": chat_history,
+            "input": user_input
+        })
+
+        return stream
+
     def get_context_retriever_chain(self, vector_store):
-        llm = ChatOpenAI()
         retriever = vector_store.as_retriever()
         prompt = ChatPromptTemplate.from_messages([
             MessagesPlaceholder(variable_name="chat_history"),
@@ -48,7 +58,7 @@ class OpenAIRagClient(LlmClientBase):
             ("user",
              "Given the above conversation, generate a search query to look up in order to get information relevant to the conversation")
         ])
-        retriever_chain = create_history_aware_retriever(llm, retriever, prompt)
+        retriever_chain = create_history_aware_retriever(self.llm, retriever, prompt)
         return retriever_chain
 
     def get_conversational_rag_chain(self, retriever_chain):
