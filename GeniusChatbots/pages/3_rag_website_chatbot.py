@@ -24,19 +24,14 @@ __author__ = 'EveryFine'
 
 import os
 
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains.history_aware_retriever import create_history_aware_retriever
-from langchain.chains.retrieval import create_retrieval_chain
+import streamlit as st
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
 from langchain_core.messages import AIMessage, HumanMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from home import login
-import streamlit as st
-
 from llm_clients.openai_rag_client import OpenAIRagClient
 
 st.set_page_config(page_title="RAG Website Chatbot", page_icon="🦀")
@@ -92,21 +87,22 @@ def create_chatbot():
                 st.markdown(user_query)
 
             with st.chat_message("AI"):
-                rag_client = OpenAIRagClient(model_name, openai_api_key)
-                # response = rag_client.get_invoke_response(user_query, st.session_state.chat_history,
-                #                                       st.session_state.vector_store)
-                stream = rag_client.get_stream_response(user_query, st.session_state.chat_history,
-                                                        st.session_state.vector_store)
+                with st.spinner("Thinking..."):
+                    rag_client = OpenAIRagClient(model_name, openai_api_key)
+                    # response = rag_client.get_invoke_response(user_query, st.session_state.chat_history,
+                    #                                       st.session_state.vector_store)
+                    stream = rag_client.get_stream_response(user_query, st.session_state.chat_history,
+                                                            st.session_state.vector_store)
 
-                response_container = st.empty()
-                response_text = ""
-                for chunk in stream:
-                    if answer_chunk := chunk.get("answer"):
-                        response_text += answer_chunk
-                        # 实时更新Streamlit界面上的内容
-                        response_container.markdown(response_text)
+                    response_container = st.empty()
+                    response_text = ""
+                    for chunk in stream:
+                        if answer_chunk := chunk.get("answer"):
+                            response_text += answer_chunk
+                            # 实时更新Streamlit界面上的内容
+                            response_container.markdown(response_text)
 
-                st.session_state.chat_history.append(AIMessage(content=response_text))
+                    st.session_state.chat_history.append(AIMessage(content=response_text))
 
 
 login('.streamlit/config.yaml')
