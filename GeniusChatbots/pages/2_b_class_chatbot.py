@@ -104,15 +104,24 @@ def create_chatbot():
             st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
             cfg = RunnableConfig()
             cfg["callbacks"] = [st_cb]
-            # Response without stream
-            response = chat_agent.invoke_agent_executor(prompt, cfg)
-            st.write(response["output"])
-            st.session_state.steps[str(len(msgs.messages) - 1)] = response["intermediate_steps"]
 
-            # Response with stream 效果不佳
-            # stream = chat_agent.stream_agent_executor(prompt, cfg)
-            # st.write_stream(stream)
-            # st.session_state.steps[str(len(msgs.messages) - 1)] = stream["intermediate_steps"]
+            ### Response without stream
+            # response = chat_agent.invoke_agent_executor(prompt, cfg)
+            # st.write(response["output"])
+            # st.session_state.steps[str(len(msgs.messages) - 1)] = response["intermediate_steps"]
+
+            # Response with stream
+            stream = chat_agent.stream_agent_executor(prompt, cfg)
+            response_container = st.empty()
+            response_text = ""
+            for chunk in stream:
+                if output_chunk := chunk.get("output"):
+                    response_text += output_chunk
+                    # 实时更新Streamlit界面上的内容
+                    response_container.markdown(response_text)
+                if intermediate_steps := chunk.get("intermediate_steps"):
+                    st.session_state.steps[str(len(msgs.messages) - 1)] = intermediate_steps
+
 
 
 login('.streamlit/config.yaml')
