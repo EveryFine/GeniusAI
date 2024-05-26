@@ -2,8 +2,6 @@ name: Genius AI Main Deploy
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 env:
@@ -66,7 +64,6 @@ jobs:
           password: ${{ env.TARGET_SSH_PASSWORD }}
           port: ${{ env.TARGET_SSH_PORT }}
           script: |
-            docker image pull ${{ steps.meta.outputs.tags }}
             docker container stop geniusmain
             docker container rm geniusmain
             docker container run -d --name geniusmain -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} ${{ steps.meta.outputs.tags }}
