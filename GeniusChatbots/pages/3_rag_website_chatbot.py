@@ -94,9 +94,15 @@ def create_chatbot():
                     stream = rag_client.get_stream_response(user_query, st.session_state.chat_history,
                                                             st.session_state.vector_store)
 
+                    context_container = st.empty()
                     response_container = st.empty()
                     response_text = ""
                     for chunk in stream:
+                        if answer_chunk := chunk.get("context"):
+                            with context_container:
+                                with st.expander("context", expanded=False):
+                                    st.markdown(answer_chunk)
+
                         if answer_chunk := chunk.get("answer"):
                             response_text += answer_chunk
                             # 实时更新Streamlit界面上的内容
