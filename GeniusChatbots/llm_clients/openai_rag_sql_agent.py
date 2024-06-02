@@ -29,8 +29,8 @@ class OpenAIRagSqlAgent(LlmClientBase):
         self.llm = ChatOpenAI(model_name=model_name, openai_api_key=openai_api_key, streaming=True)
         self.agent_executor = create_sql_agent(llm=self.llm,
                                                db=self.db,
-                                               agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-                                               # agent_type="openai-tools",
+                                               # agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+                                               agent_type="openai-tools",
                                                extra_tools=tools,
                                                verbose=True,
                                                memory=memory,
