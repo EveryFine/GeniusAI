@@ -2,7 +2,8 @@
 """
 -------------------------------------------------
    File Name：     4_rag_sql_chatbot
-   Description :
+   Description : 改进内容：
+   1. 在没有输入数据库密码之前报错，应该是显示提示信息
    Author :       EveryFine
    Date：          2024/6/2
 -------------------------------------------------
@@ -24,6 +25,7 @@ from langchain_community.utilities import SQLDatabase
 from langchain_core.runnables import RunnableConfig
 
 from home import login
+from llm_clients.constants import tavily_tool, date_tool, current_time_tool
 from llm_clients.openai_rag_sql_agent import OpenAIRagSqlAgent
 
 st.set_page_config(page_title="RAG SQL Chatbot", page_icon="🐌")
@@ -70,7 +72,7 @@ def create_chatbot():
             st.write(msg.content)
     if prompt := st.chat_input("Type your message here..."):
         st.chat_message("user").write(prompt)
-        tools = [TavilySearchResults()]
+        tools = [tavily_tool, date_tool, current_time_tool]
 
         rag_sql_agent = OpenAIRagSqlAgent(model_name=model_name,
                                           db=db,

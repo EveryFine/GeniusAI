@@ -29,6 +29,7 @@ from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import Tool
 
 from home import login
+from llm_clients.constants import tavily_tool, date_tool, current_time_tool
 from llm_clients.openai_chat_agent import OpenAIChatAgent
 
 # 解决错误：RuntimeError: There is no current event loop in thread 'ScriptRunner.scriptThread'.
@@ -47,6 +48,8 @@ import asyncio
 # asyncio.set_event_loop(loop)
 
 st.set_page_config(page_title="B Class Chatbot", page_icon="🐇")
+
+
 
 
 def create_chatbot():
@@ -88,12 +91,13 @@ def create_chatbot():
         if not openai_api_key:
             st.info("Please add your OpenAI API key to continue.")
             st.stop()
-        datetime_tool = Tool(
-            name="Datetime",
-            func=lambda x: datetime.now(timezone.utc).astimezone().isoformat(),
-            description="Returns the current datetime",
-        )
-        tools = [TavilySearchResults(), datetime_tool]
+        # datetime_tool = Tool(
+        #     name="Datetime",
+        #     func=lambda x: datetime.now(timezone.utc).astimezone().isoformat(),
+        #     description="Returns the current datetime",
+        # )
+
+        tools = [tavily_tool, date_tool, current_time_tool]
         chat_agent = OpenAIChatAgent(
             model_name=model_name,
             openai_api_key=openai_api_key,
@@ -121,7 +125,6 @@ def create_chatbot():
                     response_container.markdown(response_text)
                 if intermediate_steps := chunk.get("intermediate_steps"):
                     st.session_state.steps[str(len(msgs.messages) - 1)] = intermediate_steps
-
 
 
 login('.streamlit/config.yaml')

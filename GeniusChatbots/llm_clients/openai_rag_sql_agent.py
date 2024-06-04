@@ -18,6 +18,7 @@ from langchain_community.agent_toolkits import create_sql_agent
 from langchain_openai import ChatOpenAI
 
 from llm_clients.llm_client_base import LlmClientBase
+from llm_clients.sql_agent_constants import CUSTOM_SUFFIX
 
 
 class OpenAIRagSqlAgent(LlmClientBase):
@@ -29,13 +30,18 @@ class OpenAIRagSqlAgent(LlmClientBase):
         self.llm = ChatOpenAI(model_name=model_name, openai_api_key=openai_api_key, streaming=True)
         self.agent_executor = create_sql_agent(llm=self.llm,
                                                db=self.db,
-                                               # agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-                                               agent_type="openai-tools",
+                                               agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+                                               # agent_type="openai-tools",
+                                               input_variables=["input", "agent_scratchpad", "history"],
+                                               suffix=CUSTOM_SUFFIX,
                                                extra_tools=tools,
                                                verbose=True,
-                                               memory=memory,
-                                               return_intermediate_steps=True,
-                                               handle_parsing_errors=True)
+                                               agent_executor_kwargs={
+                                                   "memory": memory,
+                                                   "return_intermediate_steps": True,
+                                                   "handle_parsing_errors": True
+                                               },
+                                               )
 
     def invoke_agent_executor(self, prompt, cfg):
         response = self.agent_executor.invoke(prompt, cfg)
