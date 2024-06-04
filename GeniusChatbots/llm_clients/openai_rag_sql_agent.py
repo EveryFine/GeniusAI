@@ -13,8 +13,8 @@
 """
 __author__ = 'EveryFine'
 
-from langchain.agents import AgentType
-from langchain_community.agent_toolkits import create_sql_agent
+from langchain.agents import AgentType, initialize_agent
+from langchain_community.agent_toolkits import create_sql_agent, SQLDatabaseToolkit
 from langchain_openai import ChatOpenAI
 
 from llm_clients.llm_client_base import LlmClientBase
@@ -28,20 +28,29 @@ class OpenAIRagSqlAgent(LlmClientBase):
         self.tools = tools
         self.db = db
         self.llm = ChatOpenAI(model_name=model_name, openai_api_key=openai_api_key, streaming=True)
-        self.agent_executor = create_sql_agent(llm=self.llm,
-                                               db=self.db,
-                                               agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-                                               # agent_type="openai-tools",
-                                               input_variables=["input", "agent_scratchpad", "history"],
-                                               suffix=CUSTOM_SUFFIX,
-                                               extra_tools=tools,
+        self.toolkit = SQLDatabaseToolkit(db=db, llm=ChatOpenAI(temperature=0))
+        # self.agent_executor = create_sql_agent(llm=self.llm,
+        #                                        db=self.db,
+        #                                        agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        #                                        # agent_type="openai-tools",
+        #                                        input_variables=["input", "agent_scratchpad", "history"],
+        #                                        suffix=CUSTOM_SUFFIX,
+        #                                        extra_tools=tools,
+        #                                        verbose=True,
+        #                                        agent_executor_kwargs={
+        #                                            "memory": memory,
+        #                                            "return_intermediate_steps": True,
+        #                                            "handle_parsing_errors": True
+        #                                        },
+        #                                        )
+        all_tools = tools + self.toolkit.get_tools()
+        self.agent_executor = initialize_agent(all_tools,
+                                               self.llm,
+                                               agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
                                                verbose=True,
-                                               agent_executor_kwargs={
-                                                   "memory": memory,
-                                                   "return_intermediate_steps": True,
-                                                   "handle_parsing_errors": True
-                                               },
-                                               )
+                                               memory=memory,
+                                               return_intermediate_steps=True,
+                                               handle_parsing_errors=True)
 
     def invoke_agent_executor(self, prompt, cfg):
         response = self.agent_executor.invoke(prompt, cfg)
