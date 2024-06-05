@@ -4,6 +4,7 @@
    File Name：     4_rag_sql_chatbot
    Description : 改进内容：
    1. 在没有输入数据库密码之前报错，应该是显示提示信息
+   2. 思考过程中总是报错：Parsing error: Invalid or incomplete response
    Author :       EveryFine
    Date：          2024/6/2
 -------------------------------------------------

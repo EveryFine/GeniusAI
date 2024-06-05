@@ -46,7 +46,8 @@ class OpenAIRagSqlAgent(LlmClientBase):
         all_tools = tools + self.toolkit.get_tools()
         self.agent_executor = initialize_agent(all_tools,
                                                self.llm,
-                                               agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
+                                               # agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
+                                               agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
                                                verbose=True,
                                                memory=memory,
                                                return_intermediate_steps=True,
