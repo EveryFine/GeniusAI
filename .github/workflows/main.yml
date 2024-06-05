@@ -15,6 +15,11 @@ env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
   STREAMLIT_CONFIG: ${{ secrets.STREAMLIT_CONFIG }}
+  LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
+  LANGCHAIN_TRACING_V2: true
+  LANGCHAIN_PROJECT: GeniusAIMain
+
+
 
 jobs:
   build-and-push-image:
@@ -75,7 +80,7 @@ jobs:
           script: |
             docker container stop geniusmain
             docker container rm geniusmain
-            docker container run -d --name geniusmain -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} ${{ steps.meta.outputs.tags }}
+            docker container run -d --name geniusmain -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} -e LANGCHAIN_API_KEY=${{ env.LANGCHAIN_API_KEY }} -e LANGCHAIN_TRACING_V2=${{ env.LANGCHAIN_TRACING_V2 }} -e LANGCHAIN_PROJECT=${{ env.LANGCHAIN_PROJECT }} ${{ steps.meta.outputs.tags }}
 
 
       
