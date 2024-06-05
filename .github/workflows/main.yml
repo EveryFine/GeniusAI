@@ -30,6 +30,8 @@ jobs:
       contents: read
       packages: write
       attestations: write
+    outputs:
+      output_image_tags: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -80,7 +82,7 @@ jobs:
           script: |
             docker container stop geniusmain
             docker container rm geniusmain
-            docker container run -d --name geniusmain -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} -e LANGCHAIN_API_KEY=${{ env.LANGCHAIN_API_KEY }} -e LANGCHAIN_TRACING_V2=${{ env.LANGCHAIN_TRACING_V2 }} -e LANGCHAIN_PROJECT=${{ env.LANGCHAIN_PROJECT }} ${{ steps.meta.outputs.tags }}
+            docker container run -d --name geniusmain -p ${{ env.TARGET_SERVICE_PORT }}:8501 -e OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} -e TAVILY_API_KEY=${{ env.TAVILY_API_KEY }} -e LANGCHAIN_API_KEY=${{ env.LANGCHAIN_API_KEY }} -e LANGCHAIN_TRACING_V2=${{ env.LANGCHAIN_TRACING_V2 }} -e LANGCHAIN_PROJECT=${{ env.LANGCHAIN_PROJECT }} ${{needs.build-and-push-image.outputs.output_image_tags}}
 
 
       
