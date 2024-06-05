@@ -17,6 +17,10 @@ from langchain.agents import ConversationalChatAgent, AgentExecutor
 from langchain_community.chat_models import ChatOpenAI
 
 from llm_clients.llm_client_base import LlmClientBase
+from langchain.agents import load_tools
+from langchain.agents import initialize_agent
+from langchain.agents import AgentType
+from langchain.llms import OpenAI
 
 
 class OpenAIChatAgent(LlmClientBase):
@@ -26,14 +30,23 @@ class OpenAIChatAgent(LlmClientBase):
         self.openai_api_key = openai_api_key
         self.tools = tools
         self.llm = ChatOpenAI(model_name=model_name, openai_api_key=openai_api_key, streaming=True)
-        self.chat_agent = ConversationalChatAgent.from_llm_and_tools(llm=self.llm, tools=tools)
-        self.agent_executor = AgentExecutor.from_agent_and_tools(
-            agent=self.chat_agent,
-            tools=self.tools,
-            memory=memory,
-            return_intermediate_steps=True,
-            handle_parsing_errors=True
-        )
+        # self.chat_agent = ConversationalChatAgent.from_llm_and_tools(llm=self.llm, tools=tools)
+        #
+        # self.agent_executor = AgentExecutor.from_agent_and_tools(
+        #     agent=self.chat_agent,
+        #     tools=self.tools,
+        #     memory=memory,
+        #     return_intermediate_steps=True,
+        #     handle_parsing_errors=True
+        # )
+
+        self.agent_executor = initialize_agent(tools,
+                                               self.llm,
+                                               agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION,
+                                               verbose=True,
+                                               memory=memory,
+                                               return_intermediate_steps=True,
+                                               handle_parsing_errors=True)
 
     def invoke_agent_executor(self, prompt, cfg):
         response = self.agent_executor.invoke(prompt, cfg)
