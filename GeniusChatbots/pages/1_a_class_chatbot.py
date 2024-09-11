@@ -27,7 +27,7 @@ st.set_page_config(page_title="A Class Chatbot", page_icon="🦤")
 
 def create_chatbot():
     global st
-    model_name = "gpt-3.5-turbo"
+    model_name = "gpt-4o-mini"
     # model_name = "gpt-4o"
     openai_api_key = os.getenv("OPENAI_API_KEY")
     llm_client = OpenAIClient(model_name=model_name, openai_api_key=openai_api_key)
