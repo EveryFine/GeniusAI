@@ -62,7 +62,7 @@ def create_chatbot():
 
         """
     )
-    model_name = "gpt-3.5-turbo"
+    model_name = "gpt-4o-mini" ## gpt-4o-mini, gpt-3.5-turbo
     openai_api_key = os.getenv("OPENAI_API_KEY")
     msgs = StreamlitChatMessageHistory()
     memory = ConversationBufferMemory(

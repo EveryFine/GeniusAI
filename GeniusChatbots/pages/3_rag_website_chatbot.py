@@ -60,7 +60,7 @@ def create_chatbot():
         The **AG Website Chatbot** leverages langchain's RAG technology to enable dynamic conversations about website content. Users simply input a URL and the chatbot provides immediate, context-aware insights, facilitating a deeper understanding of web content. 
         """
     )
-    model_name = "gpt-3.5-turbo"
+    model_name = "gpt-4o-mini"
     openai_api_key = os.getenv("OPENAI_API_KEY")
     with st.sidebar:
         website_url = st.text_input("Website URL")
